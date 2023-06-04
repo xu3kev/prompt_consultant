@@ -1,18 +1,80 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Question Answering Site</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <style>
-        /* Add your custom CSS here */
+        body {
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+
+        #question-input {
+            margin-bottom: 0px;
+        }
+        #question-input-group {
+            width: 50%;
+            margin: auto;
+        }
+        #answer-box {
+            margin-top: 2%;
+            margin-left: auto;
+            margin-right: auto;
+            display: none;
+            width: 60%;
+        }
+
+        .card {
+            transition: box-shadow .3s;
+        }
+
+        .card:hover {
+            box-shadow: 0 0 11px rgba(33, 33, 33, .2); 
+        }
+
+        #thinking-animation {
+            display: none;
+        }
+
+        .input-group {
+            align-items: stretch; /* align items vertically */
+        }
+        #bot-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            display: block;
+            margin: auto;
+            margin-bottom: 2%;
+        }
+
     </style>
 </head>
+
 <body>
-    <h1>Welcome to My Q&A Site</h1>
-    <p>Get instant answers to all your questions. Just type your question below and hit 'Ask'.</p>
-    <input id="question-input" type="text" placeholder="Type your question here..." />
-    <button onclick="askQuestion()">Ask</button>
-    <div id="thinking-animation" style="display: none;">Thinking...</div>
-    <div id="answer-box"></div>
+    <div class="container">
+        <div class="text-center">
+            <h1 class="my-5">Prompt Consultant</h1>
+            <img id="bot-image" src="static/bot.png" alt="Bot">
+
+            <p>Need help with prompting language models to anwser?<br>Tell us your prompt/question and let us provide some tips for you!</p>
+            <div id="question-input-group" class="input-group">
+                <input id="question-input" type="text" class="form-control" placeholder="Type your question here..." />
+                <div class="input-group-append">
+                    <button class="btn btn-primary" onclick="askQuestion()">Ask</button>
+                </div>
+            </div>
+            <i id="thinking-animation" class="fa fa-spinner fa-spin fa-3x"></i>
+            <div id="answer-box" class="card">
+                <div class="card-body"></div>
+            </div>
+        </div>
+    </div>
     <script>
         function askQuestion() {
             var question = document.getElementById('question-input').value;
@@ -22,15 +84,20 @@
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4 && xhr.status === 200) {
                     var json = JSON.parse(xhr.responseText);
-                    document.getElementById('answer-box').innerText = json.answer;
+                    document.getElementById('answer-box').children[0].innerText = json.answer;
                     document.getElementById('thinking-animation').style.display = 'none';
+                    document.getElementById('answer-box').style.display = 'block';
                 }
             };
-            document.getElementById('thinking-animation').style.display = 'block';
+            document.getElementById('thinking-animation').style.display = 'inline-block';
+            document.getElementById('answer-box').style.display = 'none';
             xhr.send(JSON.stringify({
                 question: question
             }));
         }
     </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

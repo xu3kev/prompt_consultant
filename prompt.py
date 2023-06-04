@@ -74,7 +74,7 @@ def prompt_claude(question):
     response = client.completion(
         prompt=prompt_str,
         stop_sequences = [anthropic.HUMAN_PROMPT],
-        model="claude-instant-v1-100k",
+        model="claude-v1.3-100k",
         max_tokens_to_sample=512,
     )
 
