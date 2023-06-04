@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Question Answering Site</title>
+    <style>
+        /* Add your custom CSS here */
+    </style>
+</head>
+<body>
+    <h1>Welcome to My Q&A Site</h1>
+    <p>Get instant answers to all your questions. Just type your question below and hit 'Ask'.</p>
+    <input id="question-input" type="text" placeholder="Type your question here..." />
+    <button onclick="askQuestion()">Ask</button>
+    <div id="thinking-animation" style="display: none;">Thinking...</div>
+    <div id="answer-box"></div>
+    <script>
+        function askQuestion() {
+            var question = document.getElementById('question-input').value;
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", 'http://localhost:5000/ask', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var json = JSON.parse(xhr.responseText);
+                    document.getElementById('answer-box').innerText = json.answer;
+                    document.getElementById('thinking-animation').style.display = 'none';
+                }
+            };
+            document.getElementById('thinking-animation').style.display = 'block';
+            xhr.send(JSON.stringify({
+                question: question
+            }));
+        }
+    </script>
+</body>
+</html>
